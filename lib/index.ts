@@ -1,32 +1,28 @@
 import { Readable } from 'stream';
 
 export default class DateFakerStream extends Readable {
-  
   startingTimestamp: number;
   endingTimestamp: number;
-  minIntervalInSeconds: number;
-  maxIntervalInSeconds: number;
+  minInterval: number;
+  maxInterval: number;
 
   private lastGeneratedTimeStamp: number;
 
-  constructor(startingDate: Date, endingDate: Date, minIntervalInSeconds: number, maxIntervalInSeconds: number) {
+  constructor(startingDate: Date, endingDate: Date, minInterval: number, maxInterval: number) {
     super({ objectMode: true, highWaterMark: 1000 });
     this.startingTimestamp = startingDate.getTime();
     this.endingTimestamp = endingDate.getTime();
-    this.minIntervalInSeconds = minIntervalInSeconds;
-    this.maxIntervalInSeconds = maxIntervalInSeconds;
+    this.minInterval = Math.ceil(minInterval);
+    this.maxInterval = Math.floor(maxInterval);
     this.lastGeneratedTimeStamp = this.startingTimestamp;
   }
 
   private _getRndomIncrement(): number {
-    const minInt = Math.ceil(this.minIntervalInSeconds);
-    const maxInt = Math.floor(this.maxIntervalInSeconds);
-    return Math.floor(Math.random() * (maxInt - minInt + 1)) + minInt;
+    return Math.floor(Math.random() * (this.maxInterval - this.minInterval + 1)) + this.minInterval;
   }
 
   _read() {
-
-    this.lastGeneratedTimeStamp = this.startingTimestamp + this._getRndomIncrement();
+    this.lastGeneratedTimeStamp = this.lastGeneratedTimeStamp + this._getRndomIncrement();
 
     if (this.lastGeneratedTimeStamp > this.endingTimestamp) {
       this.push(null);
