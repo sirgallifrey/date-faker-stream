@@ -1,6 +1,6 @@
 {
   "name": "date-faker-stream",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Date stream useful for testing or seeding purproses",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
